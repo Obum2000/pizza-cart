@@ -18,7 +18,10 @@
         mediumPizzaTotal : 0.00, 
         mediumpizzaQty : 0, 
         largePizzaTotal : 0.00, 
-        largepizzaQty : 0, 
+        largepizzaQty : 0,
+        payNow : false, 
+        paymentAmount : 0,
+        paymentMessage : '',
         buysmallPizza() {
             this.smallPizzaTotal += 49.00, this.smallpizzaQty += 1
         },
@@ -48,6 +51,32 @@
         },
         totalQty() {
             return this.smallpizzaQty + this.mediumpizzaQty + this.largepizzaQty
+        },
+        makePayment() {
+            if (!this.paymentAmount) {
+                this.paymentMessage = 'No Amount Entered!'
+            }
+            if (this.paymentAmount >= this.cartTotal()) {
+                this.paymentMessage = 'Payment successful!'
+
+                setTimeout(() => {
+                    this.payNow = false;
+                    this.clearCart();
+                }, 3000)
+                
+            }
+            else {
+                this.paymentMessage = ' Payment failed - Insufficient amount!'
+            }
+                
+        },
+        clearCart() {
+        this.smallPizzaTotal = 0.00; 
+        this.smallpizzaQty = 0; 
+        this.mediumPizzaTotal = 0.00; 
+        this.mediumpizzaQty = 0; 
+        this.largePizzaTotal = 0.00; 
+        this.largepizzaQty = 0;
         }
     }">
 
@@ -118,7 +147,7 @@
                             R<span x-text="largePizzaTotal"></span>
                         </td>
 					</tr>
-					<tr>
+					<tr x-show="cartTotal() > 0">
 						<td colspan="2">Total</td>
 						<td>
                             R<span x-text="cartTotal()"></span>
@@ -126,18 +155,21 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-
-							<div class="message" >Message...</div>
-							<div>
-								<label for="">Payment amount</label>
-								<input class="input" type="number" placeholder="Payment amount" >
-							</div>
-
+                            <div x-show="payNow">
+							    <div class="message" x-text="paymentMessage" ></div>
+							        <div>
+								        <label for="">Payment amount</label>
+								        <input class="input" type="number" placeholder="Payment amount" x-model="paymentAmount" >
+                                        <button x-on:click="makePayment" class="btn" >
+                                            <img src="./images/shopping-cart.png" width="20" alt="">Pay Now</button>
+							        </div>
+                
+                                </div>
+                            </div>
 						</td>
 						<td>
-							<button class="btn" >
-								<img src="./images/shopping-cart.png" width="20" alt="">
-								Buy</button>
+							<button x-show="!payNow" x-on:click="payNow=true" class="btn" >
+								<img src="./images/shopping-cart.png" width="20" alt="">Pay</button>
 						</td>
 					</tr>
 				</table>
