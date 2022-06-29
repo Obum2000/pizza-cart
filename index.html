@@ -160,7 +160,7 @@
 							        <div>
 								        <label for="">Payment amount</label>
 								        <input class="input" type="number" placeholder="Payment amount" x-model="paymentAmount" >
-                                        <button x-on:click="makePayment" class="btn" >
+                                        <button x-show="paymentAmount > 0" x-on:click="makePayment" class="btn" >
                                             <img src="./images/shopping-cart.png" width="20" alt="">Pay Now</button>
 							        </div>
                 
